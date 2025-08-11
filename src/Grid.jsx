@@ -52,7 +52,7 @@ function Grid() {
     const [selectX, setSelectX] = useState(0);
     const [selectY, setSelectY] = useState(0);
     const [picked, setPicked] = useState(false);
-    const gridSize = 6;
+    const gridSize = 5;
     const gridRef = useRef(null);
     const [cells, setCells] = useState(() => {
         // initialize 2D array of random colors
@@ -109,17 +109,35 @@ function Grid() {
         return () => window.removeEventListener("keydown", handleKeyDown);
     }, [selectX, selectY, picked, gridSize, cells]);
 
+    // Helper to determine border sides for group outline
+    // Borders between sections removed; function kept for possible future use
+    function getGroupBorders(x, y) {
+        return {};
+    }
+
     return (
         <div className="centered-grid" tabIndex={0} ref={gridRef}>
             {cells.map((row, rowIdx) =>
-                row.map((cell, colIdx) => (
-                    <div key={`${rowIdx}-${colIdx}`} className={((selectX === rowIdx && selectY === colIdx) ? (!picked ? "selected-grid-cell" : "picked-grid-cell") : "grid-cell")}> 
+                row.map((cell, colIdx) => {
+                    const borderStyle = getGroupBorders(rowIdx, colIdx);
+                    // Tint background with color, but more visible
+                    let tint = cell + '66'; // normal tint
+                    if (selectX === rowIdx && selectY === colIdx) {
+                        tint = cell + 'bb'; // much stronger tint for selected
+                    }
+                    return (
                         <div
-                            className={"cell-circle "}
-                            style={{ backgroundColor: cell }}
-                        />
-                    </div>
-                ))
+                            key={`${rowIdx}-${colIdx}`}
+                            className={((selectX === rowIdx && selectY === colIdx) ? (!picked ? "selected-grid-cell" : "picked-grid-cell") : "grid-cell")}
+                            style={{ background: tint }}
+                        >
+                            <div
+                                className={"cell-circle "}
+                                style={{ backgroundColor: cell }}
+                            />
+                        </div>
+                    );
+                })
             )}
         </div>
     );

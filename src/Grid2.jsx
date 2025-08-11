@@ -52,7 +52,7 @@ function Grid2() {
     const [selectX, setSelectX] = useState(0);
     const [selectY, setSelectY] = useState(0);
     const [picked, setPicked] = useState(false);
-    const gridSize = 6;
+    const gridSize = 5;
     const gridRef = useRef(null);
     const [cells, setCells] = useState(() => {
         // initialize 2D array of random colors
@@ -112,14 +112,25 @@ function Grid2() {
     return (
         <div className="centered-grid" tabIndex={0} ref={gridRef}>
             {cells.map((row, rowIdx) =>
-                row.map((cell, colIdx) => (
-                    <div key={`${rowIdx}-${colIdx}`} className={((selectX === rowIdx && selectY === colIdx) ? (!picked ? "selected-grid-cell" : "picked-grid-cell") : "grid-cell")}> 
+                row.map((cell, colIdx) => {
+                    // Tint background with color, more visible
+                    let tint = cell + '66';
+                    if (selectX === rowIdx && selectY === colIdx) {
+                        tint = cell + 'bb';
+                    }
+                    return (
                         <div
-                            className={"cell-circle "}
-                            style={{ backgroundColor: cell }}
-                        />
-                    </div>
-                ))
+                            key={`${rowIdx}-${colIdx}`}
+                            className={((selectX === rowIdx && selectY === colIdx) ? (!picked ? "selected-grid-cell" : "picked-grid-cell") : "grid-cell")}
+                            style={{ background: tint }}
+                        >
+                            <div
+                                className={"cell-circle "}
+                                style={{ backgroundColor: cell }}
+                            />
+                        </div>
+                    );
+                })
             )}
         </div>
     );
