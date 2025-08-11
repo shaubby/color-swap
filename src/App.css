@@ -115,3 +115,66 @@ body, #root {
 .read-the-docs {
   color: #888;
 }
+
+/* Modal styles for centered popup */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-popup {
+  background: white;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  min-width: 300px;
+  animation: modalAppear 0.3s ease-out;
+}
+
+.modal-popup h2 {
+  margin: 0 0 20px 0;
+  font-size: 2.5em;
+  color: #363636;
+  font-weight: bold;
+}
+
+.modal-popup button {
+  background: #4CAF50;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  font-size: 1.2em;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s, transform 0.1s;
+}
+
+.modal-popup button:hover {
+  background: #45a049;
+  transform: translateY(-2px);
+}
+
+.modal-popup button:active {
+  transform: translateY(0);
+}
+
+@keyframes modalAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.8) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}

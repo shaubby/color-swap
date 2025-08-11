@@ -48,21 +48,32 @@ import { useState, useEffect, useRef } from "react";
 const colors = ['#ebc034', '#6193d4', '#d46161', '#7fc464'];
 
 
-function Grid() {
+function Grid({ initialCells, onWin, disabled }) {
     const [selectX, setSelectX] = useState(0);
     const [selectY, setSelectY] = useState(0);
     const [picked, setPicked] = useState(false);
     const gridSize = 5;
     const gridRef = useRef(null);
-    const [cells, setCells] = useState(() => {
+    const [cells, setCells] = useState(initialCells || (() => {
         // initialize 2D array of random colors
         return Array.from({ length: gridSize }, () =>
             Array.from({ length: gridSize }, () => colors[Math.floor(Math.random() * colors.length)])
         );
-    });
+    }));
+
+    useEffect(() => {
+        if (initialCells) {
+            setCells(initialCells);
+            setSelectX(0);
+            setSelectY(0);
+            setPicked(false);
+        }
+    }, [initialCells]);
 
     useEffect(() => {
         const handleKeyDown = (e) => {
+            if (disabled) return; // Don't allow movement if game is over
+            
             let newX = selectX;
             let newY = selectY;
             let moved = false;
@@ -89,6 +100,7 @@ function Grid() {
                         // Check after swap
                         if (verifyGridConnected(newCells)) {
                             console.log("Grid is verified!");
+                            if (onWin) onWin();
                         }
                         return newCells;
                     });
@@ -107,7 +119,7 @@ function Grid() {
         };
         window.addEventListener("keydown", handleKeyDown);
         return () => window.removeEventListener("keydown", handleKeyDown);
-    }, [selectX, selectY, picked, gridSize, cells]);
+    }, [selectX, selectY, picked, gridSize, cells, disabled, onWin]);
 
     // Helper to determine border sides for group outline
     // Borders between sections removed; function kept for possible future use
