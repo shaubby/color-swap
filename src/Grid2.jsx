@@ -48,7 +48,7 @@ import { useState, useEffect, useRef } from "react";
 const colors = ['#ebc034', '#6193d4', '#d46161', '#7fc464'];
 
 
-function Grid() {
+function Grid2() {
     const [selectX, setSelectX] = useState(0);
     const [selectY, setSelectY] = useState(0);
     const [picked, setPicked] = useState(false);
@@ -66,20 +66,21 @@ function Grid() {
             let newX = selectX;
             let newY = selectY;
             let moved = false;
-            if (e.key === "ArrowUp") {
+            // Movement: WASD only
+            if (e.key === "w" || e.key === "W") {
                 newX = Math.max(0, selectX - 1);
                 moved = newX !== selectX;
-            } else if (e.key === "ArrowDown") {
+            } else if (e.key === "s" || e.key === "S") {
                 newX = Math.min(gridSize - 1, selectX + 1);
                 moved = newX !== selectX;
-            } else if (e.key === "ArrowLeft") {
+            } else if (e.key === "a" || e.key === "A") {
                 newY = Math.max(0, selectY - 1);
                 moved = newY !== selectY;
-            } else if (e.key === "ArrowRight") {
+            } else if (e.key === "d" || e.key === "D") {
                 newY = Math.min(gridSize - 1, selectY + 1);
                 moved = newY !== selectY;
             }
-            if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) {
+            if (["w", "W", "a", "A", "s", "S", "d", "D"].includes(e.key)) {
                 if (picked && (newX !== selectX || newY !== selectY)) {
                     setCells((prevCells) => {
                         const newCells = prevCells.map(row => [...row]);
@@ -100,8 +101,7 @@ function Grid() {
                 }
                 setSelectX(newX);
                 setSelectY(newY);
-            } else if (e.key === "Shift" || e.key === "ShiftRight") {
-            } else if (e.key === "/") {
+            } else if (e.key === " " || e.key === "Spacebar") {
                 setPicked((prev) => !prev);
             }
         };
@@ -125,4 +125,4 @@ function Grid() {
     );
 }
 
-export default Grid;
+export default Grid2;
